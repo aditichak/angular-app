@@ -29,25 +29,30 @@ function($stateProvider, $urlRouterProvider) {
 });
 
   $urlRouterProvider.otherwise('home');
-}]);
+}
+])
 
-app.factory('posts', ['$http', function($http){
+.factory('posts', ['$http', function($http){
   var o = {
     posts: []
   };
-  o.get = function(id) {
-  return $http.get('/posts/' + id).then(function(res){
-    return res.data;
-  });
-};
-o.addComment = function(id, comment) {
-  return $http.post('/posts/' + id + '/comments', comment);
-};
+
   o.getAll = function() {
     return $http.get('/posts').success(function(data){
       angular.copy(data, o.posts);
     });
   };
+
+  o.get = function(id) {
+  return $http.get('/posts/' + id).then(function(res){
+    return res.data;
+  });
+};
+
+o.addComment = function(id, comment) {
+  return $http.post('/posts/' + id + '/comments', comment);
+};
+  
   o.create = function(post) {
   return $http.post('/posts', post).success(function(data){
     o.posts.push(data);
@@ -64,21 +69,18 @@ o.upvoteComment = function(post, comment) {
     .success(function(data){
       comment.upvotes += 1;
     });
-};
+}
 
   return o;
 
-}])
-app.controller('MainCtrl', [
+}
+])
+
+.controller('MainCtrl', [
 '$scope',
 'posts',
 
-function($scope, posts, post){
- 
-	$scope.test = 'Hello world!';
-	$scope.posts = posts.posts;
- 
-
+function($scope, posts){
 
 $scope.addPost = function(){
   if(!$scope.title || $scope.title === '') { return; }
@@ -97,7 +99,7 @@ $scope.incrementUpvotes = function(post) {
 
 }])
 
-app.controller('PostsCtrl', [
+.controller('PostsCtrl', [
 '$scope',
 'posts',
 'post',
@@ -113,10 +115,10 @@ $scope.addComment = function(){
     $scope.post.comments.push(comment);
   });
   $scope.body = '';
-};
+}
 $scope.incrementUpvotes = function(comment){
   posts.upvoteComment(post, comment);
-};
+}
 
 }]);
 
