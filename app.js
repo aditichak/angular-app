@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 require('./models/Posts');
 require('./models/Comments');
 
-mongoose.connect('mongodb://localhost/news');
+mongoose.connect('mongodb://127.0.0.1:27017/test');
 
 
 var routes = require('./routes/index');
